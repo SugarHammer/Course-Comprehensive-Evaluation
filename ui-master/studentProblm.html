@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>欢迎评教</title>
+		
+		<link rel="stylesheet" type="text/css" href="js/layui/css/layui.css"/>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/Global.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body class="">
+		
+
+
+   <div id="" class="studentproblem">
+   	
+   </div>
+<button type="button" class="center layui-btn subutton" id="subbit">提交</button>
+
+<!-- <form action="" method="get" style="width: 1200px;height: 100%;">
+<div style="margin-left: auto;margin-right:auto;margin-top: 20px;">
+<label>你评教时的心态是</label><br /><br />
+<label><input name="Fruit" type="radio" value="" />想对老师提出建设性意见，仔细评价 </label><br/>
+<label><input name="Fruit" type="radio" value="" />不评教会有很多不方便，随便评完 </label><br/>
+<label><input name="Fruit" type="radio" value="" />学院要求评的</label><br/>
+<label><input name="Fruit" type="radio" value="" />想评价老师的教学质量 </label><br/>
+
+-->
+
+
+
+<script type="text/javascript">
+
+var tostring="";
+	$(function(){
+		$.ajax({
+			type:"get",
+			 url:"http://127.0.0.1:8080//index/findAll",
+			 
+			contentType:"application/x-www-form-urlencoded;charset=utf-8",
+			/* data: {'indexid':indexid}, */
+			success:function(msg){
+				console.log(msg.data);
+				 
+				for(var key=0 in msg.data){
+					console.log(msg.data[key].option1+msg.data[key].score1);
+		 tostring +='<form action="" method="get" style="width: 1200px;height: 100%;">'+
+		           '<div style="margin-left: auto;margin-right:auto; margin-top: 20px;"class="liu">'+
+		         '<label>'+( parseInt(key)+parseInt(1))+" "+msg.data[key].indexname+'</label><br /><br />'+
+		           '<label><input name="Fruit" type="radio" value="'+msg.data[key].score1+'" />'+msg.data[key].option1+'</label><br/>'+
+		           '<label><input name="Fruit" type="radio" value="'+msg.data[key].score2+'" />'+msg.data[key].option2+'</label><br/>'+
+		           '<label><input name="Fruit" type="radio" value="'+msg.data[key].score3+'" />'+msg.data[key].option3+'</label><br/>'+
+		           '<label><input name="Fruit" type="radio" value="'+msg.data[key].score4+'" />'+msg.data[key].option4+'</label><br/>'
+				    +' </div>'+
+					'</form>'
+					
+					
+				}
+				
+				$(".studentproblem").append(tostring);
+			},
+			error:function(){
+				alert("失败了哟")
+			}
+			
+			
+		})
+		
+	   $("#subbit").click(function(){
+		   
+		   var newscript = document.createElement('script');
+		   		newscript.setAttribute('type','text/javascript');
+		   		newscript.setAttribute('src','js/Global.js');
+		   		var head = document.getElementsByTagName('head')[0];
+		   		head.appendChild(newscript);
+		   		
+		   		
+		   		 	  var id=window.globalConfig.id; 
+		   			
+		   			 var id2=window.globalConfig.id2;
+		             var id3=window.globalConfig.ids3;
+		       
+		  /* console.log($('input[name="Fruit"]:checked').val()); */
+		 /* console.log($('input:radio:checked')) */
+		 console.log($('input[name="Fruit"]:checked').length);
+		 /* for(var key=0;key<$('input:radio:checked');key++ ) */
+		/* console.log($('input:radio:checked').val()) */
+		 var array=new Array();
+		 var a=0;
+		 array=$('input[name="Fruit"]:checked');
+		 for(var key=0;key<$('input[name="Fruit"]:checked').length;key++){
+			 console.log($(array[key]).val())
+			 a +=parseInt($(array[key]).val())
+		 }
+		/* console.log("数字a"+" "+a+" fsdf"+id+ ""+id2) */
+		 $("#subbit").prop("disabled",true)
+		  
+		 var data={
+			 'tccid':id2,
+			 'userid':id,
+			 'score':a,
+			 'teacherid':id3
+			
+		 }
+		 $.ajax({
+			 type:"post",
+			    url:"http://127.0.0.1:8080//result/save",
+			  dataType: 'json',
+			  contentType: "application/json;charset=utf-8",
+			    
+			 data: JSON.stringify(data),
+			 success:function(msg){
+				 alert("成功了哟")
+			 },
+			 error:function(){
+				 layer.msg("你个智障提交失败", {time:1000, icon:5, shift:6},function(){
+				 	
+				 });
+			 }
+		 })
+		 
+	   })
+	})
+	
+	
+</script>			 
+
+
+	</body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layui</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <link rel="stylesheet" type="text/css" href="js/layui/css/layui.css"/>
+   <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+   <script src="js/Sys_Student.js" type="text/javascript" charset="utf-8"></script>
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+ <table class="layui-hide" id="test" lay-filter="test"></table>
+  
+ <script type="text/html" id="toolbarDemo">
+   <div class="layui-btn-container">
+      
+		 <input type="text"  class="layui-text " placeholder="请输入名字" lay-event="text" id="studentna"/>
+		 <button class="layui-btn"  lay-event="findByName"style="margin: 5px;">查询学生名称</button>
+	  <input type="text"  class="layui-text " placeholder="请输入id" lay-event="text" id="studentById"/>
+	  <button class="layui-btn" lay-event="findByid"style="margin: 5px;">查询学生id</button>
+   </div>
+ </script>
+  
+ <script type="text/html" id="barDemo">
+	 <a class="layui-btn layui-btn-xs" lay-event="Sysclazz">班级更改</a>
+   <a class="layui-btn layui-btn-xs" lay-event="update">修改</a>
+   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+ </script>
+            
+               
+           
+ <script src="js/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+ <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 --> 
+  
+ 
+ <script>
+ layui.use('table', function(){
+   var table = layui.table;
+   window.onload=function(){
+		 
+	 }
+   
+	  table.render({
+	    elem: '#test'
+	    ,url:'http://127.0.0.1:8080//student/findPage'
+	 ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板 
+	   ,defaultToolbar: [ 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+	      title: '提示'
+	      ,layEvent: 'LAYTABLE_TIPS'
+	      ,icon: 'layui-icon-tips'
+	    }] 
+	    ,title: '用户数据表'
+	    ,cols: [[
+	     /* {type: 'checkbox', fixed: 'left'}, */
+	      {field:'studentid', title:'ID', width:180, fixed: 'left', unresize: true, sort: true,hide:true}
+	      ,{field:'studentno', title:'学生编号', width:220}
+	      ,{field:'studentname', title:'学生姓名', width:220, edit: 'text'}
+	 		 	,{field:'clzzid', title:'学生班级', width:220,hide:true}
+	 		,{field:'classname', title:'学生班级', width:220}
+	 		/* ,{field:'is_delete', title:'是否删除', width:120, edit: 'text'} */
+	       
+	      
+	    
+	      
+	      
+	      ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:250}
+	    ]]
+	    ,page: {
+	 		 layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+	 		         //,curr: 5 //设定初始在第 5 页
+	 		         ,limit:10 //一页显示多少条
+	 		         ,limits:[5,10,15]//每页条数的选择项
+	 		         ,groups: 2 //只显示 2 个连续页码
+	 		         ,first: "首页" //不显示首页
+	 		         ,last: "尾页" //不显示尾页
+	 	 }
+	  });
+	 
+   //头工具栏事件
+   table.on('toolbar(test)', function(obj){
+     var checkStatus = table.checkStatus(obj.config.id);
+     switch(obj.event){
+       case 'getCheckData':
+         var data = checkStatus.data;
+         layer.alert(JSON.stringify(data));
+       break;
+       case 'getCheckLength':
+         var data = checkStatus.data;
+         layer.msg('选中了：'+ data.length + ' 个');
+       break;
+       case 'isAll':
+         layer.msg(checkStatus.isAll ? '全选': '未全选');
+       break;
+        case 'findByName':
+			     
+				  $.ajax({
+						     type:"get",
+						        url:"http://127.0.0.1:8080//student/findLikeBy",
+						     
+						       contentType: "application/x-www-form-urlencoded;charset=utf-8",
+						        
+						     data: {"studentname":$("#studentna").val()},
+								 success:function(msg){
+									
+									
+									
+									table.render({
+									   elem: '#test'
+									   ,url:'http://127.0.0.1:8080//student/findLikeBy?studentname='+$("#studentna").val()
+									,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板 
+									 /*  ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+									     title: '提示'
+									     ,layEvent: 'LAYTABLE_TIPS'
+									     ,icon: 'layui-icon-tips'
+									   }] */
+									   ,title: '用户数据表'
+									   ,cols: [[
+									    /* {type: 'checkbox', fixed: 'left'}, */
+									     {field:'studentid', title:'ID', width:80, fixed: 'left', unresize: true, sort: true,hide:true}
+									     ,{field:'studentno', title:'学生编号', width:120}
+									     ,{field:'studentname', title:'学生姓名', width:120, edit: 'text'}
+											 	,{field:'clzzid', title:'学生班级', width:120,hide:true}
+										
+									      
+									     
+									   
+									     
+									     
+									     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:250}
+									   ]]
+									   ,page: {
+											 layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+											         //,curr: 5 //设定初始在第 5 页
+											         ,limit:10 //一页显示多少条
+											         ,limits:[5,10,15]//每页条数的选择项
+											         ,groups: 2 //只显示 2 个连续页码
+											         ,first: "首页" //不显示首页
+											         ,last: "尾页" //不显示尾页
+										 }
+									 });
+									
+									
+									
+									 
+								 },
+								 error:function(){
+									 alert("失败")
+								 }
+					})
+				break;
+			  case 'findByid':
+				   
+				$.ajax({
+					     type:"get",
+					        url:"http://127.0.0.1:8080//student/findbyid",
+					     
+					       contentType: "application/x-www-form-urlencoded;charset=utf-8",
+					        
+					     data: {"studentid":$("#studentById").val()},
+							 success:function(msg){
+								      if(msg.code==0){
+												
+													table.render({
+												   elem: '#test'
+												   ,url:'http://127.0.0.1:8080/student/findbyid?studentid='+$("#studentById").val()
+												,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板 
+												 ,title: '用户数据表'
+												   ,cols: [[
+												    /* {type: 'checkbox', fixed: 'left'}, */
+												     {field:'studentid', title:'ID', width:80, fixed: 'left', unresize: true, sort: true,hide:true}
+												     ,{field:'studentno', title:'学生编号', width:120}
+												     ,{field:'studentname', title:'学生姓名', width:120, edit: 'text'}
+														 	,{field:'clzzid', title:'学生班级', width:120,hide:true}
+													
+												      
+												     
+												   
+												     
+												     
+												     ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:250}
+												   ]]
+												   
+												 });
+											}else{
+												alert(msg.reason);
+											}
+										 
+										 	
+										       
+										      
+										    
+										      
+					
+										
+										
+								
+								 
+								 
+								 
+								},
+								})
+				
+				
+			             
+			             
+			
+			
+			  
+				 break;
+       //自定义头工具栏右侧图标 - 提示
+       case 'LAYTABLE_TIPS':
+         layer.alert('这是工具栏右侧自定义的一个图标按钮');
+       break;
+     };
+   });
+   
+   //监听行工具事件
+   table.on('tool(test)', function(obj){
+     var data = obj.data;
+     //console.log(obj)
+     if(obj.event === 'del'){
+       layer.confirm('真的删除行么', function(index){
+         obj.del();
+		   layer.close(index);
+		 console.log(obj.data.studentid)
+		 var studentid=obj.data.studentid;
+		 
+        $.ajax({
+			 type:"get",
+			  url:"http://127.0.0.1:8080//student/deleteid",
+			  
+			 contentType:"application/x-www-form-urlencoded;charset=utf-8",
+			  
+			data: {'studentid':studentid},
+			 success:function(msg){
+				 alert(msg);
+				 
+			 }
+			 
+			
+		})
+       });
+     } else if(obj.event === 'edit'){
+       layer.prompt({
+         formType: 2
+         ,value: data.email
+       }, function(value, index){
+         obj.update({
+           email: value
+         });
+         layer.close(index);
+		 
+       });
+     }else if(obj.event==="update"){
+			/* alert(obj.data.studentid) */
+			var studentid =obj.data.studentid;
+			var studentno=obj.data.studentno;
+			var studentname=obj.data.studentname;
+			var clazzid=obj.data.clazzid;
+			var isDelete=obj.data.isDelete;
+			
+			data={
+				"studentid":studentid,
+				 "studentno": studentno,
+				 "studentname":studentname,
+				 "clazzid":clazzid,
+				 "isDelete":isDelete
+				 
+			}
+			 $.ajax({
+				 type:"post",
+				  url:"http://127.0.0.1:8080//student/updata",
+				  dataType: 'json',
+				 contentType: "application/json;charset=utf-8",
+				data: JSON.stringify(data),
+				success:function(){
+					alert("更新成功");
+						
+				},
+				error:function(){
+					alert("班级数字，是否删除只能为0或者1")
+				}
+			 })
+		 }else if(obj.event=="Sysclazz"){
+			 	var studentid =obj.data.studentid;
+			 var studentno=obj.data.studentno;
+			 var studentname=obj.data.studentname;
+			 var clazzid=obj.data.clazzid;
+			 	layer.open({
+			   type: 2,
+			   area: ['700px', '450px'],
+			   fixed: false, //不固定
+			   maxmin: true,
+			   content: 'tanchu.html?userid='+obj.data.studentid
+			 });
+			
+		 }else if(obj.event=="findByName"){
+			   alert("dsjflsd")
+		 }
+		 
+   });
+ });
+ 
+ 
+
+
+ </script>
+
+<div id="add-Stuent" style="display:none;" >
+       <form class="layui-form" id="add-form" action="">
+         <div class="layui-form-item center" >
+          <label class="layui-form-label" style="width: 100px" >学生编号</label>
+          <div class="layui-input-block">
+           <input type="text" name="name" id="studentno" style="width: 240px" lay-verify="required" placeholder="请输入配置名称" autocomplete="off" class="layui-input">
+          </div>
+         </div>
+         <div class="layui-form-item">
+          <label class="layui-form-label" style="width: 100px">学生姓名</label>
+          <div class="layui-input-block">
+           <input type="text" name="type" id="studentname" required style="width: 240px" lay-verify="required" placeholder="请输入配置类型" autocomplete="off" class="layui-input">
+          </div>
+         </div>
+        
+         <div class="layui-form-item">
+          <div class="layui-input-block">
+           <button class="layui-btn" id="studentSave">保存</button>
+           <button type="button" class="layui-btn" id="closeBtn" >关闭</button>
+          </div>
+         </div> 
+       </form>  
+    </div>
+	  <button class="layui-btn layui-btn-sm" lay-event="table" id="addStu">添加</button>
+<script type="text/javascript">
+	$(function(){
+		$("#addStu").click(function(){
+			alert("gdggfds");
+		$("#add-Stuent").css("display","block") 
+
+		})
+		$("#closeBtn").click(function(){
+			$("#add-Stuent").css("display","none")
+		})
+	})
+</script>
+</body>
+</html>

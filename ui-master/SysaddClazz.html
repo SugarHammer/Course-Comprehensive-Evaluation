@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="js/layui/css/layui.css"/>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Global.js"></script>
+	<body>
+		<div id="add-Stuent" style=";" >
+		       <form class="layui-form" id="add-form" action="">
+				     
+				   
+				   
+		         <div class="layui-form-item center" >
+		          <label class="layui-form-label" style="width: 100px" >班级编号</label>
+		          <div class="layui-input-block">
+		           <input type="text"  name="name" id="studentno1" style="width: 240px" lay-verify="required" placeholder="请输入配置名称" autocomplete="off" class="layui-input">
+		          </div>
+		         </div>
+		         <div class="layui-form-item">
+		          <label class="layui-form-label" style="width: 100px">班级名称</label>
+		          <div class="layui-input-block">
+		           <input type="text" name="type" id="studentname1"  required style="width: 240px" lay-verify="required" placeholder="请输入配置类型" autocomplete="off" class="layui-input">
+		          </div>
+		         </div>
+				 
+	            <div class="layui-form-item">
+	            <label class="layui-form-label">所属部门</label>
+	           <div class="layui-input-block" style="width: 240px"">
+	             <select name="city" lay-verify="required" id="testTYpe">
+	               <option value="请选择"></option>
+	              
+	              
+	             </select>
+	           </div>
+	           </div>
+			    
+
+			
+			
+		       
+		         <div class="layui-form-item">
+		          <div class="layui-input-block">
+		          <input type="button" value="保存" id="studentSave1" class="layui-btn">
+		        
+		          </div>
+		         </div> 
+		       </form>  
+		    </div>
+	
+	</body>
+	
+<script>//Demo
+layui.use('form', function(){
+  var form = layui.form;
+  
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+    layer.msg(JSON.stringify(data.field));
+    return true;
+  });
+});
+</script>
+<script type="text/javascript">
+	$(function(){
+		var newscript = document.createElement('script');
+		newscript.setAttribute('type','text/javascript');
+		newscript.setAttribute('src','js/Global.js');
+		var head = document.getElementsByTagName('head')[0];
+		head.appendChild(newscript);
+		
+		
+		 	 var studentid=window.globalConfig.id;
+			var   optionstring=""  
+          $.ajax({
+			   type:"get",
+			    url:"http://127.0.0.1:8080/department/list",
+			    
+			   contentType:"application/x-www-form-urlencoded;charset=utf-8",
+			   
+			  
+			   success:function(msg){
+				 
+			     for(var key=0 in msg.data ){
+					
+						  optionstring += "<option value=\""  +msg.data[key].departmentid + "\">" +msg.data[key].departmentid  + "</option>"; 
+                            $("#testTYpe").html("<option value='请选择'  >请选择...</option>"+ optionstring); 
+						
+				 } 
+				 
+				 }
+		  }) 
+		 
+		 
+		     
+		  $("#studentSave1").click(function(){
+             var data={
+            			 /* "clazzid":$("#studentid1").val(), */
+            			  "clazzno":$("#studentno1").val(),
+            			  "classname":$("#studentname1").val(),
+            			  "departmentid":$("#testTYpe").val(),
+            			  "isDelete":$("#studentDelete").val()
+            }
+			$.ajax({
+				   type:"post",
+				    dateType:"json",
+				   contentType: "application/json;charset=utf-8",
+				   url:"http://127.0.0.1:8080//clazz/save",
+				   data:JSON.stringify(data),
+				   success:function(msg){
+					   alert(msg.data)
+				   },
+				   error:function(){
+					   alert("失败")
+				   }
+			})
+			 
+		
+		  })
+		
+	})
+	
+</script>
+
+</html>

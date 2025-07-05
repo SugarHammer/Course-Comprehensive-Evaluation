@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="js/layui/css/layui.css"/>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Global.js"></script>
+	<body>
+		<div id="add-Stuent" style=";" >
+		  
+				     <div class="layui-form-item center" >
+				   <label class="layui-form-label" style="width: 100px" >用户账号</label>
+				   <div class="layui-input-block">
+				    <input type="text" name="name" id="AccountName" style="width: 240px" lay-verify="required" placeholder="请输入账号名称" autocomplete="off" class="layui-input">
+				   </div>
+				  </div>
+				  <div class="layui-form-item">
+				   <label class="layui-form-label" style="width: 100px">用户密码</label>
+				   <div class="layui-input-block">
+				    <input type="text" name="type" id="AccountPass" required style="width: 240px" lay-verify="required" placeholder="请输入用户密码" autocomplete="off" class="layui-input">
+				   </div>
+				  </div>
+				     <div class="layui-form-item">
+				   <label class="layui-form-label" style="width: 100px">确认密码</label>
+				   <div class="layui-input-block">
+				    <input type="text" name="type" id="AccountPass1" required style="width: 240px" lay-verify="required" placeholder="请确认密码" autocomplete="off" class="layui-input">
+				   </div>
+				  </div>
+				  
+				 
+	            <div class="layui-form-item">
+	            <label class="layui-form-label">选择类型</label>
+	           <div class="layui-input-block" style="width: 240px"">
+	             <select class="form-control m-b" name="Type" id="Type">
+	             <option selected="" value="选择类型">选择</option>
+	             <option value="10">老师</option>
+	             <option value="20">学生</option>
+				 <option value="30">管理员</option>
+	             <!-- <option value="30">总部统配补货单</option>
+	             <option value="40">耗材铺货单</option>
+	             <option value="70">原材料铺货单</option>
+	             <option value="80">农资铺货单</option> -->
+	             </select>
+	             
+	           </div>
+	           </div>
+			    
+				<div class="layui-form-item">
+				 <label class="layui-form-label">类型id</label>
+				<div class="layui-input-block" style="width: 240px"">
+				  <select class="form-control m-b" name="Type" id="Type1">
+				  <option selected="" value="选择类型">选择</option>
+			
+				  </select>
+				  
+				</div>
+				</div>
+
+			
+			
+		     
+		         <div class="layui-form-item">
+		          <div class="layui-input-block">
+		          <input type="button" value="保存" id="studentSave1" class="layui-btn">
+		        
+		          </div>
+		         </div> 
+		      
+		    </div>
+	
+	</body>
+	
+<script>//Demo
+layui.use('form', function(){
+  var form = layui.form;
+  
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+    layer.msg(JSON.stringify(data.field));
+    return true;
+  });
+});
+</script>
+
+ 
+
+
+	</body>
+	<script type="text/javascript">
+		$("#Type").on("change",
+function() {
+$("#Type1").val("");
+if($("#Type").val()==20)
+{
+//$("#WorkStationType").find("option[value = '"+50+"']").attr("selected","selected");
+var toString ="";
+ $.ajax({
+			   type:"get",
+			    url:"http://127.0.0.1:8080//student/findAll",
+			    
+			   contentType:"application/x-www-form-urlencoded;charset=utf-8",
+			    success:function(msg){
+					 for(var key=0 in msg.data){
+										      
+											   toString += "<option value=\"" +msg.data[key].studentid + "\">" +msg.data[key].studentname  + "</option>"; 
+					           $("#Type1").html("<option value='请选择'  >请选择...</option>"+  toString); 
+											
+					} 
+					
+				}
+			  
+			  
+			  
+			  })
+
+
+
+}else if($("#Type").val()==10)
+
+{  var optionstring="";
+$("#Type1").html="";
+	 $.ajax({
+				   type:"get",
+				    url:"http://127.0.0.1:8080//teacher/findAll",
+				    
+				   contentType:"application/x-www-form-urlencoded;charset=utf-8",
+				    success:function(msg){
+						 for(var key=0 in msg.data ){
+											      
+												  optionstring += "<option value=\"" +msg.data[key].teacherid + "\">" +msg.data[key].teachername  + "</option>"; 
+						           $("#Type1").html("<option value='请选择'  >请选择...</option>"+ optionstring); 
+												
+						} 
+					
+					}
+				  
+				  
+				  
+				  })
+ 
+
+}else if($("#Type").val()==30){
+	var manger="";
+   $("#Type1").empty()
+		  manger1 += "<option value=\""  + "\">" +管理员 + "</option>"; 
+		     $("#Type1").html("<option value='请选择'  >请选择...</option>"+ manger1); 
+}else{
+	 $("#Type1").html("");
+}
+});
+
+
+
+ 
+		$("#studentSave1").click(function(){
+			if($("#AccountName").val()==""||$("#AccountName").val()==null){
+				layer.msg("用户名不能为空", {time:1000, icon:5, shift:6},function(){
+					
+				});
+				return;
+			} else if($("#AccountPass").val()==""||$("#AccountPass").val()==null){
+				layer.msg("密码不能为空", {time:1000, icon:5, shift:6},function(){
+					
+				});
+				return;
+			} else if($("#AccountPass").val()!=$("#AccountPass1").val()){
+				layer.msg("密码不一致", {time:1000, icon:5, shift:6},function(){
+					
+				});
+				return;
+			}else if($("#Type").val()=="10"){
+				var data={
+					"teacherid":$("#Type1").val(),
+					"username":$("#AccountName").val(),
+					"password":$("#AccountPass").val()
+				}
+				$.ajax({
+					type:"post",
+					url:"http://127.0.0.1:8080//user/insert",
+					dataType: 'json',
+					contentType: "application/json;charset=utf-8",
+					   
+					data: JSON.stringify(data),
+					success:function(msg){
+							layer.msg(msg.data, {time:1000, icon:5, shift:6},function(){
+								
+							});
+						}
+				})
+				
+				alert("10")
+			} else if($("#Type").val()=="20"){
+				var data={
+					"studentid":$("#Type1").val(),
+					"username":$("#AccountName").val(),
+					"password":$("#AccountPass").val()
+				}
+				$.ajax({
+					type:"post",
+					url:"http://127.0.0.1:8080//user/insert",
+					dataType: 'json',
+					contentType: "application/json;charset=utf-8",
+					   
+					data: JSON.stringify(data),
+					success:function(msg){
+							layer.msg(msg.data, {time:1000, icon:5, shift:6},function(){
+								
+							});
+						},
+					  
+				  error:function(msg){
+					  layer.msg(失败, {time:1000, icon:5, shift:6},function(){
+					  	
+					  });
+				  }
+				})
+				
+				alert("20")
+			}else if($("#Type").val()=="30"){
+				var data={
+					
+					"username":$("#AccountName").val(),
+					"password":$("#AccountPass").val()
+				}
+				$.ajax({
+					type:"post",
+					url:"http://127.0.0.1:8080//user/insert",
+					dataType: 'json',
+					contentType: "application/json;charset=utf-8",
+					   
+					data: JSON.stringify(data),
+					success:function(msg){
+							layer.msg(msg.data, {time:1000, icon:5, shift:6},function(){
+								
+							});
+						}
+				})
+				
+				
+				alert("30")
+			}
+			else{
+				
+			}
+		}) 
+
+
+
+
+
+
+
+
+
+	</script>
+
+</html>

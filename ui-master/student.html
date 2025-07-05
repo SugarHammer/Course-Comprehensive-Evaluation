@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>课程综合评价系统</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+
+  <link rel="stylesheet" href="js/layui/css/layui.css"  media="all">
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/Global.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/student.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">课程综合评价系统</div>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
+            <span class="sname">贤心</span>
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="javascript:;" id="passnew">修改密码</a></dd>
+         <!-- <dd><a href="">安全设置</a></dd> -->
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="javascript:;"id="out">退了</a></li>
+    </ul>
+  </div>
+
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">学生评教</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;" _link="teaching.html" class="ia">我的课程</a></dd>
+            <dd><a href="javascript:;" _link="teaching1.html" class="ia">我的评教</a></dd>
+
+          </dl>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+   <iframe src="" id="demoAdmin" style="width: 100%; height:100%;margin-left: 12px;" frameborder="0"></iframe>
+  </div>
+
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+  XXX学校课程综合评价系统
+  </div>
+</div>
+<script src="js/layui/layui.all.js" charset="utf-8"></script>
+<script>
+//JavaScript代码区域
+layui.use('element', function(){
+  var element = layui.element;
+
+});
+</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d214947968792b839fd669a4decaaffc";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+</body>
+
+<script>
+	$("#passnew").click(function(){
+		 var table = layui.table;
+		var newscript = document.createElement('script');
+		newscript.setAttribute('type','text/javascript');
+		newscript.setAttribute('src','js/Global.js');
+		var head = document.getElementsByTagName('head')[0];
+		head.appendChild(newscript);
+
+
+		 	var id=window.globalConfig.id;
+
+		layer.open({
+		  type: 2,
+		  area: ['700px', '450px'],
+		  fixed: false, //不固定
+		  maxmin: true,
+		  content: 'newPassword.html?userid='+id
+		});
+	})
+	$("#out").click(function(){
+		window.localStorage["token"]="";
+		window.location.replace("login.html");
+	})
+</script>
+</html>
